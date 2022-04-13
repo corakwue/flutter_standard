@@ -123,9 +123,9 @@ class _PaymentState extends State<PaymentWidget>
   }
 
   @override
-  onTransactionSuccess(String id, String txRef) {
+  onTransactionSuccess(String id, String txRef, String paymentType) {
     final ChargeResponse chargeResponse = ChargeResponse(
-        status: "success", success: true, transactionId: id, txRef: txRef);
+        status: "success", success: true, transactionId: id, txRef: txRef, paymentType: paymentType);
     Navigator.maybePop(widget.mainContext, chargeResponse);
   }
 }
