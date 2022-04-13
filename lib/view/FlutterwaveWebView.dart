@@ -23,16 +23,17 @@ class FlutterwaveInAppBrowser extends InAppBrowser {
     final status = url?.queryParameters["status"] ?? responseBody['status'] as String?;
     final txRef = url?.queryParameters["tx_ref"] ?? responseBody['txRef'] as String?;
     final id = url?.queryParameters["transaction_id"] ?? responseBody['id'].toString() as String?;
+    final paymentType = url?.queryParameters['payment_type'] ?? responseBody['paymentType'] as String?;
     final hasRedirected = status != null && txRef != null;
     if (hasRedirected && url != null) {
       hasCompletedProcessing = hasRedirected;
-      _processResponse(url, status, txRef, id);
+      _processResponse(url, status, txRef, id, paymentType);
     }
   }
 
-  _processResponse(Uri url, String? status, String? txRef, String? id) {
+  _processResponse(Uri url, String? status, String? txRef, String? id, String? paymentType) {
     if ("successful" == status) {
-      callBack.onTransactionSuccess(id!, txRef!);
+      callBack.onTransactionSuccess(id!, txRef!, paymentType!);
     } else {
       callBack.onCancelled();
     }
