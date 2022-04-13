@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutterwave_standard/core/TransactionCallBack.dart';
 import 'package:flutterwave_standard/utils.dart';
@@ -17,9 +19,10 @@ class FlutterwaveInAppBrowser extends InAppBrowser {
 
   @override
   Future onLoadStart(url) async {
-    final status = url?.queryParameters["status"];
-    final txRef = url?.queryParameters["tx_ref"];
-    final id = url?.queryParameters["transaction_id"];
+    final responseBody = url?.queryParameters.containsKey('response') == true ? json.decode(url?.queryParameters['response'] ?? '') : {};
+    final status = url?.queryParameters["status"] ?? responseBody['status'] as String?;
+    final txRef = url?.queryParameters["tx_ref"] ?? responseBody['txRef'] as String?;
+    final id = url?.queryParameters["transaction_id"] ?? responseBody['id'].toString() as String?;
     final hasRedirected = status != null && txRef != null;
     if (hasRedirected && url != null) {
       hasCompletedProcessing = hasRedirected;
